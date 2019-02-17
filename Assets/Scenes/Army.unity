@@ -1340,7 +1340,7 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: 4f21ea3ff16ca2749806ec9ee2150cf5, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f157355dbcf6d4e4188190e53a26b9a6, type: 2}
+      objectReference: {fileID: 2100000, guid: b250206f1d00a8544b0501d6c3cbce4a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f21ea3ff16ca2749806ec9ee2150cf5, type: 3}
 --- !u!4 &1095906451 stripped
@@ -2622,11 +2622,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2072350343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af3d878952b9d045ac631dc99923ff9, type: 3}
+  m_Script: {fileID: 11500000, guid: 3479c3146a5f5264ebdd6b563f3ae94e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  units: []
-  squads: []
   squadPrefab: {fileID: 4694712132773241826, guid: dd5c67844a0bb7c459eea7bef75b3dc8,
     type: 3}
   ground:

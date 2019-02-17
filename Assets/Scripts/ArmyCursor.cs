@@ -20,7 +20,7 @@ public class ArmyCursor : MonoBehaviour
 	public Text unitClass;
 	public Text unitLevel;
 
-	public Army army;
+	public ArmyDisplay army;
 
 	private void Start()
 	{
