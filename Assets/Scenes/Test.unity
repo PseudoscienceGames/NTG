@@ -518,7 +518,7 @@ GameObject:
   - component: {fileID: 1879374333}
   - component: {fileID: 1879374332}
   m_Layer: 0
-  m_Name: SettlementManger
+  m_Name: CityManger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -533,13 +533,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1879374331}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49e5b3432cd08a54fbde92406bc42f80, type: 3}
+  m_Script: {fileID: 11500000, guid: 749ab14f14f141643a1582e5e480ecf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 4
-  settlementPrefab: {fileID: 7902132279993008572, guid: 1a8007c726112b64c9d5dc82a1422a69,
+  cityCount: 5
+  cityPrefab: {fileID: 1661849854325215885, guid: c66e4cd0b91a2b34087bee5f2fc921b2,
     type: 3}
-  addHomes: 0
 --- !u!4 &1879374333
 Transform:
   m_ObjectHideFlags: 0

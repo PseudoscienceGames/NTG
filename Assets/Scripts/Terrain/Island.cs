@@ -236,6 +236,20 @@ public class Island : MonoBehaviour
 		int i = Random.Range(0, tiles.Count);
 		return new List<Vector2Int> (tiles.Keys)[i];
 	}
+	public bool IsBuildable(Vector2Int loc)
+	{
+		bool buildable = true;
+		foreach(Vector2Int l in HexGrid.FindAdjacentGridLocs(loc))
+		{
+			if (tiles[loc] != tiles[l])
+				buildable = false;
+		}
+		if(FindBlob(loc).forest)
+			buildable = false;
+		if(tiles[loc] <= 0)
+			buildable = false;
+		return buildable;
+	}
 }
 public class Blob
 {
