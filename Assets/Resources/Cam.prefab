@@ -88,7 +88,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 30
   m_Depth: -1
   m_CullingMask:
@@ -157,20 +157,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3443fe5e32c0f1747af1f2a74a829f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoom: 0
-  targetZoom: 0
-  zoomMin: 1
-  zoomMax: 100
-  zoomSpeed: 1
-  cameraRotSpeed: 1
+  zoom: 100
+  targetZoom: 100
+  zoomMin: 10
+  zoomMax: 200
+  zoomSpeed: 50
+  cameraRotSpeed: 11
+  camPanSpeed: 0.5
+  scrollAreaSize: 0
+  screenEdgeScroll: 0
   cameraPivot: {fileID: 286546240966293693}
   mask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   oldPos: {x: 0, y: 0, z: 0}
   smoothTime: 0.1
   rotSmoothTime: 0.1
   camRotSmoothTime: 0.1
   zoomSmoothTime: 0.1
-  camXRotMin: 0
-  camXRotMax: 90
+  camXRotMin: 30
+  camXRotMax: 80

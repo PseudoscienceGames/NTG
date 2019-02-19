@@ -208,7 +208,7 @@ public class Island : MonoBehaviour
 			}
 			foreach (Blob r in ring)
 			{
-				r.level = x + Random.Range(0, 2);
+				r.level = x;// + Random.Range(0, 2);
 				left.Remove(r);
 				if (Random.Range(0, 3) == 0)
 					r.forest = true;
@@ -226,9 +226,15 @@ public class Island : MonoBehaviour
 				{
 					GameObject currentTree = Instantiate(treePrefab, HexGrid.GridToWorld(l, tiles[l]), Quaternion.Euler(0, Random.Range(0, 360), 0)) as GameObject;
 					currentTree.transform.localScale *= Random.Range(0.75f, 1.25f);
+					currentTree.transform.SetParent(transform);
 				}
 			}
 		}
+	}
+	public Vector2Int RandomGridLoc()
+	{
+		int i = Random.Range(0, tiles.Count);
+		return new List<Vector2Int> (tiles.Keys)[i];
 	}
 }
 public class Blob
