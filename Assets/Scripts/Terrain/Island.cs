@@ -241,7 +241,9 @@ public class Island : MonoBehaviour
 		bool buildable = true;
 		foreach(Vector2Int l in HexGrid.FindAdjacentGridLocs(loc))
 		{
-			if (tiles[loc] != tiles[l])
+			if(!tiles.ContainsKey(l))
+				buildable = false;
+			else if (tiles[loc] != tiles[l])
 				buildable = false;
 		}
 		if(FindBlob(loc).forest)

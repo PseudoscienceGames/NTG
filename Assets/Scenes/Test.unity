@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomSeed: 1
   seed: 0
-  islandSize: 16
+  islandSize: 32
   blobPerChunk: 64
   chunks: []
   chunkDatas: []
@@ -536,9 +536,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 749ab14f14f141643a1582e5e480ecf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cityCount: 5
+  cityCount: 50
   cityPrefab: {fileID: 1661849854325215885, guid: c66e4cd0b91a2b34087bee5f2fc921b2,
     type: 3}
+  cities: []
 --- !u!4 &1879374333
 Transform:
   m_ObjectHideFlags: 0

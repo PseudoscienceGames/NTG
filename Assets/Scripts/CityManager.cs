@@ -6,6 +6,7 @@ public class CityManager : MonoBehaviour
 {
 	public int cityCount;
 	public GameObject cityPrefab;
+	public List<Transform> cities = new List<Transform>();
 
 	private void Start()
 	{
@@ -14,12 +15,18 @@ public class CityManager : MonoBehaviour
 
 	void AddCities()
 	{
-		for (int i = 0; i < cityCount; i++)
+		while (cities.Count < cityCount)
 		{
-			Transform currentSettlement = (Instantiate(cityPrefab) as GameObject).transform;
+			Transform currentCity = (Instantiate(cityPrefab) as GameObject).transform;
+			
 			Vector2Int loc = Island.instance.RandomGridLoc();
-			currentSettlement.transform.position = HexGrid.GridToWorld(loc, Island.instance.tiles[loc]);
-			currentSettlement.transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 0);
+			while (!Island.instance.IsBuildable(loc))
+				loc = Island.instance.RandomGridLoc();
+			currentCity.transform.position = HexGrid.GridToWorld(loc, Island.instance.tiles[loc]);
+			currentCity.GetComponent<City>().StartCity(loc);
+			currentCity.GetComponent<City>().startLoc = loc;
+			cities.Add(currentCity);
+
 		}
 	}
 }
