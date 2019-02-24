@@ -16,6 +16,7 @@ public class Island : MonoBehaviour
 	public List<Vector2Int> chunks = new List<Vector2Int>();
 	public List<ChunkData> chunkDatas = new List<ChunkData>();
 	public Dictionary<Vector2Int, int> tiles = new Dictionary<Vector2Int, int>();
+	public List<Vector2Int> occupied = new List<Vector2Int>();
 	public int tileCount;
 
 	public GameObject treePrefab;
@@ -220,13 +221,18 @@ public class Island : MonoBehaviour
 	{
 		foreach(Blob b in blobs)
 		{
-			if(b.forest)
+			foreach (Vector2Int l in b.gridLocs)
 			{
-				foreach(Vector2Int l in b.gridLocs)
+				if (tiles[l] > 1)
 				{
-					GameObject currentTree = Instantiate(treePrefab, HexGrid.GridToWorld(l, tiles[l]), Quaternion.Euler(0, Random.Range(0, 360), 0)) as GameObject;
-					currentTree.transform.localScale *= Random.Range(0.75f, 1.25f);
-					currentTree.transform.SetParent(transform);
+					int chance = b.forest ? 1 : 9;
+					if (Random.Range(0, 10) >= chance)
+					{
+						GameObject currentTree = Instantiate(treePrefab, HexGrid.GridToWorld(l, tiles[l]), Quaternion.Euler(0, Random.Range(0, 360), 0)) as GameObject;
+						currentTree.transform.localScale *= Random.Range(0.75f, 1.25f);
+						currentTree.transform.SetParent(transform);
+						occupied.Add(l);
+					}
 				}
 			}
 		}
@@ -250,7 +256,14 @@ public class Island : MonoBehaviour
 			buildable = false;
 		if(tiles[loc] <= 0)
 			buildable = false;
+		if(occupied.Contains(loc))
+			buildable = false;
 		return buildable;
+	}
+	public Vector3 GridToWorld(Vector2Int gridLoc)
+	{
+		Vector3 worldLoc = HexGrid.GridToWorld(gridLoc, tiles[gridLoc]);
+		return worldLoc;
 	}
 }
 public class Blob

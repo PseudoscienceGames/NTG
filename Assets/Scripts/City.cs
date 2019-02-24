@@ -5,58 +5,63 @@ using UnityEngine;
 public class City : MonoBehaviour
 {
 	public Vector2Int startLoc;
-	public Dictionary<Vector2Int, int> buildings = new Dictionary<Vector2Int, int>();
+	public Faction faction;
+	public List<Building> buildings = new List<Building>();
 
 	public int pop;
 	public int food;
 	public int wood;
 	public int stone;
 
-	public GameObject town;
+	public bool grow;
 
-	public bool full;
-
-	public void StartCity(Vector2Int startingLoc)
+	public void StartCity(Vector2Int startingLoc, Faction f)
 	{
-		AddBuilding(startingLoc, 0);
+		startLoc = startingLoc;
+		faction = f;
+		AddBuilding(startingLoc);
 	}
 
-	void AddBuilding(Vector2Int loc, int building)
+	void AddBuilding(Vector2Int loc)
 	{
 		if (Island.instance.IsBuildable(loc))
 		{
-			buildings.Add(loc, building);
-			Instantiate(town, HexGrid.GridToWorld(loc, Island.instance.tiles[loc]), Quaternion.Euler(0, Random.Range(0, 360), 0));
+			Building b = (Instantiate(Resources.Load("Homes")) as GameObject).GetComponent<Building>();
+			Island.instance.occupied.Add(loc);
+			buildings.Add(b);
+			b.city = this;
+			b.faction = faction;
+			b.gridLoc = loc;
+			b.transform.SetParent(transform);
+			b.transform.position = Island.instance.GridToWorld(loc);
 		}
 		else
 			Debug.Log("CAN'T BUILD HERE");
+		faction.AddInfluence(loc);
 	}
 
 	void Grow()
 	{
 		List<Vector2Int> poss = new List<Vector2Int>();
-		foreach (Vector2Int l in buildings.Keys)
+		foreach (Building l in buildings)
 		{
-			foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(l))
+			foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(l.gridLoc))
 			{
-				if (!poss.Contains(adj) && !buildings.ContainsKey(adj) && Island.instance.IsBuildable(adj))
+				if (!poss.Contains(adj) && Island.instance.IsBuildable(adj))
 					poss.Add(adj);
 			}
 		}
-		if (poss.Count == 0)
-			full = true;
-		else
-			AddBuilding(poss[Random.Range(0, poss.Count)], 0);
+		Vector2Int loc = poss[Random.Range(0, poss.Count)];
+		Debug.Log(poss.Count);
+		AddBuilding(loc);
 	}
 
 	private void Update()
 	{
-		if (!full)
+		if(grow)
 		{
-			pop++;
-			if (pop > buildings.Count * 100)
-				Grow();
+			grow = false;
+			Grow();
 		}
 	}
-
 }

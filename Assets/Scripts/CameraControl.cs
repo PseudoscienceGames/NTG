@@ -34,6 +34,16 @@ public class CameraControl : MonoBehaviour
 	public static CameraControl Instance;
 	void Awake() { Instance = this; }
 
+	private void Start()
+	{
+		Invoke("Raise", 0.1f);
+	}
+	void Raise()
+	{
+		if(Physics.Raycast(transform.position + (Vector3.up * 50), -Vector3.up, out RaycastHit hit, 500, mask))
+			transform.position = hit.point;
+	}
+
 	void Update()
 	{
 		if (Input.GetAxis("Vertical") != 0)
@@ -41,7 +51,7 @@ public class CameraControl : MonoBehaviour
 		if (Input.GetAxis("Horizontal") != 0)
 			transform.position += transform.right * Input.GetAxisRaw("Horizontal") * camPanSpeed;
 		//Pivots camera based on mouse movement
-		if (Input.GetMouseButton(1))
+		if (Input.GetMouseButton(2))
 		{
 			//transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * cameraRotSpeed * Time.deltaTime, Space.Self);
 			Vector3 targetEuler = transform.eulerAngles + (Vector3.up * Input.GetAxis("Mouse X") * cameraRotSpeed);
@@ -62,7 +72,7 @@ public class CameraControl : MonoBehaviour
 					Camera.main.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
 				else
 				{
-					targetZoom += -(Input.GetAxisRaw("Mouse ScrollWheel")) * zoomSpeed;
+					targetZoom += -(Input.GetAxisRaw("Mouse ScrollWheel")) * zoomSpeed * (zoom / zoomMax);
 					if (targetZoom > zoomMax)
 						targetZoom = zoomMax - 1;
 					if (targetZoom < zoomMin)
@@ -72,22 +82,29 @@ public class CameraControl : MonoBehaviour
 				}
 			}
 		}
-		if (Input.GetMouseButtonDown(2))
+		if (Input.GetMouseButtonDown(1))
 		{
-			RaycastHit hit;
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 500, mask))
+			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 500, mask))
 				oldPos = hit.point;
+		}
+		if (Input.GetMouseButtonUp(2))
+		{
+			oldPos = transform.position;
+			velocity = Vector3.zero;
 		}
 	}
 
 	private void LateUpdate()
 	{
-		if (Input.GetMouseButton(2))
+		if (Input.GetMouseButton(1))
 		{
-			RaycastHit hit;
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 500, mask))
+			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 500, mask))
 			{
 				Vector3 targetPosition = transform.position + (oldPos - hit.point);
+				if (Physics.Raycast(targetPosition + (Vector3.up * 50), -Vector3.up, out hit, 500, mask))
+				{
+					targetPosition = hit.point;
+				}
 				transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
 			}
 		}
