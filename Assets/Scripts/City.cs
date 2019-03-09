@@ -9,24 +9,24 @@ public class City : MonoBehaviour
 	public List<Building> buildings = new List<Building>();
 
 	public int pop;
-	public int food;
-	public int wood;
-	public int stone;
 
-	public bool grow;
+	public List<float> resCount = new List<float>();
 
 	public void StartCity(Vector2Int startingLoc, Faction f)
 	{
-		startLoc = startingLoc;
+		pop = 10;
+		for (int i = 0; i < (int)ResourceType.Count; i++)
+			resCount.Add(0);
+		startLoc = startingLoc; 
 		faction = f;
-		AddBuilding(startingLoc);
+		AddBuilding(startingLoc, BuildingType.Homes);
 	}
 
-	void AddBuilding(Vector2Int loc)
+	public void AddBuilding(Vector2Int loc, BuildingType bt)
 	{
 		if (Island.instance.IsBuildable(loc))
 		{
-			Building b = (Instantiate(Resources.Load("Homes")) as GameObject).GetComponent<Building>();
+			Building b = (Instantiate(Resources.Load(bt.ToString())) as GameObject).GetComponent<Building>();
 			Island.instance.occupied.Add(loc);
 			buildings.Add(b);
 			b.city = this;
@@ -34,34 +34,22 @@ public class City : MonoBehaviour
 			b.gridLoc = loc;
 			b.transform.SetParent(transform);
 			b.transform.position = Island.instance.GridToWorld(loc);
+			b.transform.eulerAngles = new Vector3(0, Random.Range(0, 360f), 0);
+			faction.AddInfluence(loc);
 		}
 		else
 			Debug.Log("CAN'T BUILD HERE");
-		faction.AddInfluence(loc);
+		
 	}
 
-	void Grow()
+	public void Work()
 	{
-		List<Vector2Int> poss = new List<Vector2Int>();
-		foreach (Building l in buildings)
+		foreach(Building b in buildings)
 		{
-			foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(l.gridLoc))
-			{
-				if (!poss.Contains(adj) && Island.instance.IsBuildable(adj))
-					poss.Add(adj);
-			}
-		}
-		Vector2Int loc = poss[Random.Range(0, poss.Count)];
-		Debug.Log(poss.Count);
-		AddBuilding(loc);
-	}
-
-	private void Update()
-	{
-		if(grow)
-		{
-			grow = false;
-			Grow();
+			b.Work();
 		}
 	}
 }
+
+
+public enum ResourceType { Food, Wood, Stone, Count }

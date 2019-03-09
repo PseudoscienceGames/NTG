@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Faction : MonoBehaviour
 {
+	public Vector2Int gridLoc;
 	public List<Vector2Int> influence = new List<Vector2Int>();
 	public List<City> cities = new List<City>();
 	public List<Building> buildings = new List<Building>();
+	public Army army;
 
 	public void StartFaction(Vector2Int loc)
 	{
+
+		gridLoc = loc;
 		AddCity(loc);
 	}
 
@@ -29,7 +33,7 @@ public class Faction : MonoBehaviour
 	{
 		if (!influence.Contains(loc))		
 			influence.Add(loc);
-		foreach (Vector2Int adj in HexGrid.FindWithinRadius(loc, 3))
+		foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(loc))
 		{
 			if(!influence.Contains(adj))
 			{
@@ -41,5 +45,13 @@ public class Faction : MonoBehaviour
 	public void UpdateInfluence()
 	{
 		GetComponent<InfluenceMesh>().DrawInfluence(influence);
+	}
+
+	public void Work()
+	{
+		foreach(City c in cities)
+		{
+			c.Work();
+		}
 	}
 }

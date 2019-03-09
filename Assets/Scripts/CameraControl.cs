@@ -36,7 +36,7 @@ public class CameraControl : MonoBehaviour
 
 	private void Start()
 	{
-		Invoke("Raise", 0.1f);
+		Invoke("Raise", 0.2f);
 	}
 	void Raise()
 	{
@@ -69,7 +69,7 @@ public class CameraControl : MonoBehaviour
 			if (zoom > zoomMin && zoom < zoomMax)
 			{
 				if (Camera.main.orthographic)
-					Camera.main.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
+					Camera.main.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * (zoomSpeed / 100f);
 				else
 				{
 					targetZoom += -(Input.GetAxisRaw("Mouse ScrollWheel")) * zoomSpeed * (zoom / zoomMax);
@@ -108,5 +108,10 @@ public class CameraControl : MonoBehaviour
 				transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
 			}
 		}
+	}
+
+	public void FocusCam(Vector2Int loc)
+	{
+		transform.position = Island.instance.GridToWorld(loc);
 	}
 }

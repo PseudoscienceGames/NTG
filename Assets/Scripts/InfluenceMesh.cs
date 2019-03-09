@@ -6,10 +6,17 @@ using UnityEngine;
 public class InfluenceMesh : MonoBehaviour
 {
 	public float fill;
+	public Color color;
+
+	private void Awake()
+	{
+		color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+	}
 	public void DrawInfluence(List<Vector2Int> influence)
 	{
 		List<Vector3> verts = new List<Vector3>();
 		List<int> tris = new List<int>();
+		List<Color> colors = new List<Color>();
 		int triNum = 0;
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		List<Vector2Int> edge = new List<Vector2Int>();
@@ -45,6 +52,10 @@ public class InfluenceMesh : MonoBehaviour
 					verts.Add(worldLoc2);
 					verts.Add(Vector3.Lerp(worldLoc2, worldLoc3, fill));
 					verts.Add(Vector3.Lerp(worldLoc1, worldLoc3, fill));
+					colors.Add(color);
+					colors.Add(color);
+					colors.Add(color);
+					colors.Add(color);
 					tris.Add(triNum);
 					tris.Add(triNum + 1);
 					tris.Add(triNum + 2);
@@ -58,5 +69,6 @@ public class InfluenceMesh : MonoBehaviour
 		}
 		mesh.vertices = verts.ToArray();
 		mesh.triangles = tris.ToArray();
+		mesh.colors = colors.ToArray();
 	}
 }

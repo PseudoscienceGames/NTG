@@ -245,19 +245,25 @@ public class Island : MonoBehaviour
 	public bool IsBuildable(Vector2Int loc)
 	{
 		bool buildable = true;
-		foreach(Vector2Int l in HexGrid.FindAdjacentGridLocs(loc))
+		if (!tiles.ContainsKey(loc))
+			buildable = false;
+		else
 		{
-			if(!tiles.ContainsKey(l))
+			foreach (Vector2Int l in HexGrid.FindAdjacentGridLocs(loc))
+			{
+				if (!tiles.ContainsKey(l))
+					buildable = false;
+				else if (tiles[loc] != tiles[l])
+					buildable = false;
+			}
+
+			if (FindBlob(loc).forest)
 				buildable = false;
-			else if (tiles[loc] != tiles[l])
+			if (tiles[loc] <= 0)
+				buildable = false;
+			if (occupied.Contains(loc))
 				buildable = false;
 		}
-		if(FindBlob(loc).forest)
-			buildable = false;
-		if(tiles[loc] <= 0)
-			buildable = false;
-		if(occupied.Contains(loc))
-			buildable = false;
 		return buildable;
 	}
 	public Vector3 GridToWorld(Vector2Int gridLoc)

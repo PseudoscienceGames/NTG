@@ -61,7 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c17735e719d3a44288f3b10482aaaf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verts: []
   fill: 0.1
 --- !u!33 &428974646551234907
 MeshFilter:
@@ -88,7 +87,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 633fadeca31d7f24cb82a5d43624a4ca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
