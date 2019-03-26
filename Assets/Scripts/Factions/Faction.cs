@@ -54,4 +54,9 @@ public class Faction : MonoBehaviour
 			c.Work();
 		}
 	}
+
+	public void AddSquad()
+	{
+		Instantiate(Resources.Load("Unit"));
+	}
 }

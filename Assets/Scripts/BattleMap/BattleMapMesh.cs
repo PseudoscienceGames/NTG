@@ -1,39 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
-public class ChunkMesh : MonoBehaviour
+public class BattleMapMesh : MonoBehaviour
 {
 	public List<Vector3> verts;
 	public List<int> tris;
 	public List<Vector2> uvs;
 	public int triNum = 0;
 	public Mesh mesh;
-	private ChunkData cd;
+	private BattleMapData bmd;
 	private MeshCollider col;
 
-	public void GenMesh(){
-		
+	public void GenMesh()
+	{
+
 		verts = new List<Vector3>();
 		tris = new List<int>();
 		uvs = new List<Vector2>();
 		mesh = GetComponent<MeshFilter>().mesh;
 		mesh.Clear();
 		col = GetComponent<MeshCollider>();
-		cd = GetComponent<ChunkData>();
+		bmd = GetComponent<BattleMapData>();
 		triNum = 0;
-		foreach(Vector2Int loc in cd.tiles)
+		foreach (Vector2Int loc in bmd.gridLocs)
 		{
-			if(Island.instance.tiles.ContainsKey(HexGrid.MoveTo(loc, 0)) && Island.instance.tiles.ContainsKey(HexGrid.MoveTo(loc, 1)))
+			if (bmd.gridLocs.Contains(HexGrid.MoveTo(loc, 0)) && bmd.gridLocs.Contains(HexGrid.MoveTo(loc, 1)))
 			{
-				verts.Add(HexGrid.GridToWorld(loc, Island.instance.tiles[loc].height) - cd.transform.position);
+				verts.Add(HexGrid.GridToWorld(loc));
 				Vector2Int l = HexGrid.MoveTo(loc, 0);
-				verts.Add(HexGrid.GridToWorld(l, Island.instance.tiles[l].height) - cd.transform.position);
+				verts.Add(HexGrid.GridToWorld(l));
 				l = HexGrid.MoveTo(loc, 1);
-				verts.Add(HexGrid.GridToWorld(l, Island.instance.tiles[l].height) - cd.transform.position);
+				verts.Add(HexGrid.GridToWorld(l));
 				tris.Add(triNum++);
 				tris.Add(triNum++);
 				tris.Add(triNum++);
@@ -41,13 +41,13 @@ public class ChunkMesh : MonoBehaviour
 				uvs.Add(Vector2.one / 2f);
 				uvs.Add(Vector2.one / 2f);
 			}
-			if (Island.instance.tiles.ContainsKey(HexGrid.MoveTo(loc, 3)) && Island.instance.tiles.ContainsKey(HexGrid.MoveTo(loc, 4)))
+			if (bmd.gridLocs.Contains(HexGrid.MoveTo(loc, 3)) && bmd.gridLocs.Contains(HexGrid.MoveTo(loc, 4)))
 			{
-				verts.Add(HexGrid.GridToWorld(loc, Island.instance.tiles[loc].height) - cd.transform.position);
+				verts.Add(HexGrid.GridToWorld(loc));
 				Vector2Int l = HexGrid.MoveTo(loc, 3);
-				verts.Add(HexGrid.GridToWorld(l, Island.instance.tiles[l].height) - cd.transform.position);
+				verts.Add(HexGrid.GridToWorld(l));
 				l = HexGrid.MoveTo(loc, 4);
-				verts.Add(HexGrid.GridToWorld(l, Island.instance.tiles[l].height) - cd.transform.position);
+				verts.Add(HexGrid.GridToWorld(l));
 				tris.Add(triNum++);
 				tris.Add(triNum++);
 				tris.Add(triNum++);
@@ -61,7 +61,7 @@ public class ChunkMesh : MonoBehaviour
 		mesh.vertices = verts.ToArray();
 		mesh.triangles = tris.ToArray();
 		mesh.uv = uvs.ToArray();
-			mesh.RecalculateNormals();
+		mesh.RecalculateNormals();
 		col.sharedMesh = mesh;
 	}
 	void CollapseDoubles()

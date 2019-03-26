@@ -28,7 +28,8 @@ public class FactionController : MonoBehaviour
 			if (Island.instance.IsBuildable(loc))
 				buildableLocs.Add(loc);
 		}
-		while(factions.Count < factionCount && buildableLocs.Count > 0)
+		Debug.Log(buildableLocs.Count);
+		while (factions.Count < factionCount && buildableLocs.Count > 0)
 		{
 			Transform currentFaction = (Instantiate(Resources.Load("Faction")) as GameObject).transform;
 

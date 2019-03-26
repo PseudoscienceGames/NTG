@@ -15,8 +15,7 @@ public class Island : MonoBehaviour
 	public List<Blob> blobs = new List<Blob>();
 	public List<Vector2Int> chunks = new List<Vector2Int>();
 	public List<ChunkData> chunkDatas = new List<ChunkData>();
-	public Dictionary<Vector2Int, int> tiles = new Dictionary<Vector2Int, int>();
-	public List<Vector2Int> occupied = new List<Vector2Int>();
+	public Dictionary<Vector2Int, Tile> tiles = new Dictionary<Vector2Int, Tile>();
 	public int tileCount;
 
 	public GameObject treePrefab;
@@ -66,7 +65,7 @@ public class Island : MonoBehaviour
 			int x = b.level;
 			foreach (Vector2Int l in b.gridLocs)
 			{
-				tiles[l] = x;
+				tiles[l].height = x;
 			}
 		}
 		foreach (ChunkData cd in chunkDatas)
@@ -130,14 +129,14 @@ public class Island : MonoBehaviour
 		{
 			foreach (Vector2Int gl in HexGrid.FindWithinRadius(chunk, ChunkMath.chunkRadius))
 			{
-				tiles.Add(gl, 0);
+				tiles.Add(gl, new Tile(gl));
 			}
 		}
 	}
 	public int GetHeight(Vector2Int gridLoc)
 	{
 		if (tiles.ContainsKey(gridLoc))
-			return tiles[gridLoc];
+			return tiles[gridLoc].height;
 		else
 			return -1;
 	}
@@ -223,15 +222,15 @@ public class Island : MonoBehaviour
 		{
 			foreach (Vector2Int l in b.gridLocs)
 			{
-				if (tiles[l] > 1)
+				if (tiles[l].height > 1)
 				{
 					int chance = b.forest ? 1 : 9;
 					if (Random.Range(0, 10) >= chance)
 					{
-						GameObject currentTree = Instantiate(treePrefab, HexGrid.GridToWorld(l, tiles[l]), Quaternion.Euler(0, Random.Range(0, 360), 0)) as GameObject;
+						GameObject currentTree = Instantiate(treePrefab, HexGrid.GridToWorld(l, tiles[l].height), Quaternion.Euler(0, Random.Range(0, 360), 0)) as GameObject;
 						currentTree.transform.localScale *= Random.Range(0.75f, 1.25f);
 						currentTree.transform.SetParent(transform);
-						occupied.Add(l);
+						tiles[l].occupants.Add(currentTree);
 					}
 				}
 			}
@@ -253,25 +252,39 @@ public class Island : MonoBehaviour
 			{
 				if (!tiles.ContainsKey(l))
 					buildable = false;
-				else if (tiles[loc] != tiles[l])
+				else if (tiles[loc].height != tiles[l].height)
 					buildable = false;
 			}
 
 			if (FindBlob(loc).forest)
 				buildable = false;
-			if (tiles[loc] <= 0)
+			if (tiles[loc].height <= 0)
 				buildable = false;
-			if (occupied.Contains(loc))
+			if (tiles[loc].occupants.Count > 0)
 				buildable = false;
 		}
 		return buildable;
 	}
 	public Vector3 GridToWorld(Vector2Int gridLoc)
 	{
-		Vector3 worldLoc = HexGrid.GridToWorld(gridLoc, tiles[gridLoc]);
+		Vector3 worldLoc = HexGrid.GridToWorld(gridLoc, tiles[gridLoc].height);
 		return worldLoc;
 	}
 }
+[System.Serializable]
+public class Tile
+{
+	public Vector2Int gridLoc;
+	public int height;
+	public List<GameObject> occupants = new List<GameObject>();
+	public Blob blob;
+
+	public Tile(Vector2Int g)
+	{
+		gridLoc = g;
+	}
+}
+
 public class Blob
 {
 	public int level = 1;

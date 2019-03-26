@@ -14,7 +14,7 @@ public class SettlementManager : MonoBehaviour
 		{
 			Transform currentSettlement = (Instantiate(settlementPrefab) as GameObject).transform;
 			Vector2Int loc = Island.instance.RandomGridLoc();
-			currentSettlement.transform.position = HexGrid.GridToWorld(loc, Island.instance.tiles[loc]);
+			currentSettlement.transform.position = HexGrid.GridToWorld(loc, Island.instance.tiles[loc].height);
 			currentSettlement.transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 0);
 		}
 	}

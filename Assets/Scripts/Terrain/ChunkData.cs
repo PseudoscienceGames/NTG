@@ -20,7 +20,7 @@ public class ChunkData : MonoBehaviour {
 
 	public void ChangeHeight(Vector2Int v, int newHeight)
 	{
-		Island.instance.tiles[v] = newHeight;
+		Island.instance.tiles[v].height = newHeight;
 		GetComponent<ChunkMesh>().GenMesh();
 	}
 

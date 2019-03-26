@@ -7,6 +7,6 @@ public class Barracks : Building
 	public void TrainSoldier()
 	{
 		city.pop--;
-		faction.army.AddSoldier();
+		faction.army.AddUnit();
 	}
 }

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Army : MonoBehaviour
 {
-	public void AddSoldier()
+	public List<Unit> units = new List<Unit>();
+
+	public void AddUnit()
 	{
-		k
+		
 	}
 }

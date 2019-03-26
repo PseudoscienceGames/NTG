@@ -27,7 +27,7 @@ public class City : MonoBehaviour
 		if (Island.instance.IsBuildable(loc))
 		{
 			Building b = (Instantiate(Resources.Load(bt.ToString())) as GameObject).GetComponent<Building>();
-			Island.instance.occupied.Add(loc);
+			Island.instance.tiles[loc].occupants.Add(b.gameObject);
 			buildings.Add(b);
 			b.city = this;
 			b.faction = faction;
