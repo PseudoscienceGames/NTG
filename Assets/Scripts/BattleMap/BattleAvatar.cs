@@ -5,7 +5,7 @@ using UnityEngine;
 public class BattleAvatar : MonoBehaviour
 {
 	public Unit unit;
-
+	public Vector2Int gridLoc;
 	public bool isPlayer;
 
 	public void Act()

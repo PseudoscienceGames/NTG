@@ -43,6 +43,7 @@ public class BattleMapUnitController : MonoBehaviour
 			{
 				BattleAvatar currentAvi = (Instantiate(Resources.Load("UnitAvatar"), HexGrid.GridToWorld(spawnLocs[i][j]), Quaternion.identity) as GameObject).GetComponent<BattleAvatar>();
 				currentAvi.unit = t[i][j];
+				currentAvi.gridLoc = spawnLocs[i][j];
 				teams[i].Add(currentAvi);
 				if (playerTeam[i])
 					currentAvi.isPlayer = true;
