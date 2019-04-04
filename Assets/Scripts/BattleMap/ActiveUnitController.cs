@@ -25,7 +25,7 @@ public class ActiveUnitController : MonoBehaviour
 		{
 			moveMarker.position = HexGrid.GridToWorld(HexGrid.RoundToGrid(hit.point));
 		}
-		if (HexGrid.RoundToGrid(moveMarker.position) != markerGridLoc)
+		if (Input.GetMouseButtonDown(0) && HexGrid.RoundToGrid(moveMarker.position) != markerGridLoc)
 		{
 			markerGridLoc = HexGrid.RoundToGrid(moveMarker.position);
 			DrawPath(Path(unit.gridLoc, markerGridLoc));
@@ -55,16 +55,33 @@ public class ActiveUnitController : MonoBehaviour
 			List<Node> adjNodes = new List<Node>();
 			foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(loc))
 			{
-				if (BattleMapData.Instance.gridLocs.Contains(adj) && !openSet.Contains(node) && closedSet.Contains(node))
+				if (BattleMapData.Instance.gridLocs.Contains(adj) && !openSet.Contains(node) && closedSet.Contains(node) && !BattleMapData.Instance.occupied.Contains(adj))
 					adjNodes.Add(new Node(adj, node, node.gCost + 1, Vector3.Distance(HexGrid.GridToWorld(goal), HexGrid.GridToWorld(adj))));
 			}
 			foreach (Node adj in adjNodes)
 			{
+				openSet.Add(adj);
 				if (adj.hCost < node.hCost)
 					node = adj;
 			}
+			
+			if(node.gridLoc == goal)
+			{
+				openSet.Clear();
+				Node currentNode = node;
+				path.Add(currentNode.gridLoc);
+				int x = 0;
+				while(currentNode.gridLoc != start && x < 1000)
+				{
+					currentNode = currentNode.parentNode;
+					path.Add(currentNode.gridLoc);
+					x++;
+				}
+				if (x == 1000)
+					Debug.Log("Stuck in loop");
+			}
 		}
-		f
+		path.Reverse();
 
 		return path;
 	}

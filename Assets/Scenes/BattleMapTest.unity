@@ -147,7 +147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridLocs: []
   occupied: []
-  mapSize: 4
+  mapSize: 16
+  obstacleCount: 5
 --- !u!4 &263482318
 Transform:
   m_ObjectHideFlags: 0
