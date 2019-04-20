@@ -23,7 +23,7 @@ public class CameraControl : MonoBehaviour
 	public float rotSmoothTime;
 	public float camRotSmoothTime;
 	public float zoomSmoothTime;
-	private Vector3 velocity = Vector3.zero;
+	private  Vector3 velocity = Vector3.zero;
 	private Vector3 rVelocity = Vector3.zero;
 	private Vector3 cVelocity = Vector3.zero;
 	private Vector3 zVelocity = Vector3.zero;
@@ -87,7 +87,7 @@ public class CameraControl : MonoBehaviour
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 500, mask))
 				oldPos = hit.point;
 		}
-		if (Input.GetMouseButtonUp(2))
+		if (Input.GetMouseButtonUp(1))
 		{
 			oldPos = transform.position;
 			velocity = Vector3.zero;
@@ -112,6 +112,6 @@ public class CameraControl : MonoBehaviour
 
 	public void FocusCam(Vector2Int loc)
 	{
-		transform.position = Island.instance.GridToWorld(loc);
+		transform.position = HexGrid.GridToWorld(loc);
 	}
 }

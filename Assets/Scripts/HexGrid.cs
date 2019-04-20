@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public static class HexGrid
 {
 	public static float hexRadius = 0.5773502691896258f;
-	public static float tileHeight = .5f;
+	public static float tileHeight = 1f/3f;
 	public static float sqrt3 = Mathf.Sqrt(3);
 
 	//Finds distance in number of hexes between the hex at grid location fromLoc and the hex at toLoc
@@ -142,5 +142,20 @@ public static class HexGrid
 			at = closest;
 		}
 		return path;
+	}
+
+	public static List<Vector3> GetVertLocs(Vector2Int gridLoc)
+	{
+		List<Vector3> verts = new List<Vector3>();
+		Vector3 pos = GridToWorld(gridLoc);
+
+		for (int i = 0; i < 6; i++)
+		{
+			Vector3 adj1 = GridToWorld(MoveTo(gridLoc, i));
+			Vector3 adj2 = GridToWorld(MoveTo(gridLoc, i + 1));
+			Vector3 vert = (pos + adj1 + adj2) / 3f;
+			verts.Add(vert);
+		}
+		return verts;
 	}
 }
