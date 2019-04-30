@@ -26,7 +26,7 @@ public class MapControls : MonoBehaviour
 			}
 			if (Input.GetMouseButtonUp(1) && Vector3.Distance(startPos, Input.mousePosition) < 5)
 			{
-				selectedUnit.GetComponent<Unit>().target = Cursor.Instance.gridLoc;
+				selectedUnit.GetComponent<Unit>().target = HexCursor.Instance.gridLoc;
 			}
 		}
     }

@@ -51,7 +51,7 @@ public class CameraControl : MonoBehaviour
 		if (Input.GetAxis("Horizontal") != 0)
 			transform.position += transform.right * Input.GetAxisRaw("Horizontal") * camPanSpeed;
 		//Pivots camera based on mouse movement
-		if (Input.GetMouseButton(2))
+		if (Input.GetMouseButton(1))
 		{
 			//transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * cameraRotSpeed * Time.deltaTime, Space.Self);
 			Vector3 targetEuler = transform.eulerAngles + (Vector3.up * Input.GetAxis("Mouse X") * cameraRotSpeed);
@@ -82,12 +82,12 @@ public class CameraControl : MonoBehaviour
 				}
 			}
 		}
-		if (Input.GetMouseButtonDown(1))
+		if (Input.GetMouseButtonDown(2))
 		{
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 500, mask))
 				oldPos = hit.point;
 		}
-		if (Input.GetMouseButtonUp(1))
+		if (Input.GetMouseButtonUp(2))
 		{
 			oldPos = transform.position;
 			velocity = Vector3.zero;
@@ -96,7 +96,7 @@ public class CameraControl : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		if (Input.GetMouseButton(1))
+		if (Input.GetMouseButton(2))
 		{
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 500, mask))
 			{

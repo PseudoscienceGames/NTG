@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cursor : MonoBehaviour
+public class HexCursor : MonoBehaviour
 {
 	public Vector2Int gridLoc;
 	public LayerMask mask;
+	bool done;
 
-	public static Cursor Instance;
+	public static HexCursor Instance;
 	private void Awake(){ Instance = this; }
 
 	void Update()
@@ -17,6 +18,11 @@ public class Cursor : MonoBehaviour
 			gridLoc = HexGrid.RoundToGrid(hit.point);
 			transform.position = HexGrid.GridToWorld(gridLoc, Mathf.RoundToInt(hit.point.y / 3f));
 
+		}
+		if(Input.GetMouseButtonUp(0) && !done)
+		{
+			BattleMapData.Instance.GenMapData(WorldData.Instance.tiles[gridLoc]);
+			done = true;
 		}
 	}
 }

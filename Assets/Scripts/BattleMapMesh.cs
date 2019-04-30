@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldMesh : MonoBehaviour
+public class BattleMapMesh : MonoBehaviour
 {
-	public static WorldMesh Instance;
-	private void Awake(){ Instance = this; }
-
 	public List<Vector3> verts = new List<Vector3>();
 	public List<int> tris = new List<int>();
 	public List<Vector2> uvs = new List<Vector2>();
@@ -14,11 +11,11 @@ public class WorldMesh : MonoBehaviour
 	public void GenMesh()
 	{
 		int vertCount = 0;
-		foreach(WorldTile tile in WorldData.Instance.tiles.Values)
+		foreach (BattleMapTile tile in GetComponent<BattleMapData>().tiles.Values)
 		{
 			verts.AddRange(tile.verts);
 			uvs.AddRange(tile.uvs);
-			foreach(int tri in tile.tris)
+			foreach (int tri in tile.tris)
 			{
 				tris.Add(tri + vertCount);
 			}
@@ -31,7 +28,6 @@ public class WorldMesh : MonoBehaviour
 		mesh.uv = uvs.ToArray();
 		mesh.RecalculateNormals();
 		GetComponent<MeshCollider>().sharedMesh = mesh;
-		Debug.Log(verts.Count + " " + tris.Count + " " + Time.realtimeSinceStartup);
 	}
 	void ExpandDoubles()
 	{
@@ -43,9 +39,9 @@ public class WorldMesh : MonoBehaviour
 			newVerts.Add(verts[tri]);
 			newTris.Add(newVerts.Count - 1);
 		}
-		while(newUVs.Count < newVerts.Count)
+		while (newUVs.Count < newVerts.Count)
 		{
-			newUVs.AddRange(new List<Vector2>{new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(1, 0)});
+			newUVs.AddRange(new List<Vector2> { new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(1, 0) });
 		}
 		uvs = newUVs;
 		verts = newVerts;
