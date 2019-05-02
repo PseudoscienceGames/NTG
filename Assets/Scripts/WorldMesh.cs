@@ -42,11 +42,12 @@ public class WorldMesh : MonoBehaviour
 		{
 			newVerts.Add(verts[tri]);
 			newTris.Add(newVerts.Count - 1);
+			newUVs.Add(uvs[tri]);
 		}
-		while(newUVs.Count < newVerts.Count)
-		{
-			newUVs.AddRange(new List<Vector2>{new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(1, 0)});
-		}
+		//while(newUVs.Count < newVerts.Count)
+		//{
+		//	newUVs.AddRange(new List<Vector2>{new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(1, 0)});
+		//}
 		uvs = newUVs;
 		verts = newVerts;
 		tris = newTris;

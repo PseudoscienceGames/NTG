@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public static class HexGrid
 {
 	public static float hexRadius = 0.5773502691896258f;
-	public static float tileHeight = 1f/3f;
+	public static float tileHeight = 1f/4f;
 	public static float sqrt3 = Mathf.Sqrt(3);
 
 	//Finds distance in number of hexes between the hex at grid location fromLoc and the hex at toLoc
