@@ -14,15 +14,18 @@ public class WorldMesh : MonoBehaviour
 	public void GenMesh()
 	{
 		int vertCount = 0;
-		foreach(WorldTile tile in WorldData.Instance.tiles.Values)
+		foreach (IslandData island in WorldData.Instance.islands)
 		{
-			verts.AddRange(tile.verts);
-			uvs.AddRange(tile.uvs);
-			foreach(int tri in tile.tris)
+			foreach (WorldTile tile in island.tiles.Values)
 			{
-				tris.Add(tri + vertCount);
+				verts.AddRange(tile.verts);
+				uvs.AddRange(tile.uvs);
+				foreach (int tri in tile.tris)
+				{
+					tris.Add(tri + vertCount);
+				}
+				vertCount += 6;
 			}
-			vertCount += 6;
 		}
 		ExpandDoubles();
 		Mesh mesh = GetComponent<MeshFilter>().mesh;

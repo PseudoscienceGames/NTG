@@ -24,8 +24,8 @@ public class WorldTile
 		for (int i = 0; i < verts.Count; i++)
 		{
 			Vector3 temp = verts[i];
-			temp.y = Mathf.PerlinNoise((temp.x - 10000) / 10, (temp.z + 2500) / 10) * 16;
-			//temp.y += Mathf.PerlinNoise(temp.x, temp.y);
+			//temp.y = Mathf.PerlinNoise((temp.x - 10000) / 10, (temp.z + 2500) / 10) * 16;
+			temp.y = 1;
 			temp.y = Mathf.RoundToInt(temp.y) * HexGrid.tileHeight;
 			verts[i] = temp;
 		}
