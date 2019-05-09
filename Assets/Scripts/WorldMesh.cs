@@ -16,7 +16,7 @@ public class WorldMesh : MonoBehaviour
 		int vertCount = 0;
 		foreach (IslandData island in WorldData.Instance.islands)
 		{
-			foreach (WorldTile tile in island.tiles.Values)
+			foreach (WorldTile tile in island.tiles)
 			{
 				verts.AddRange(tile.verts);
 				uvs.AddRange(tile.uvs);

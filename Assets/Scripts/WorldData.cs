@@ -12,10 +12,9 @@ public class WorldData : MonoBehaviour
 	private void Awake(){ Instance = this; }
 
 	public int worldSize;
-	public int islandCount;
-	public int maxIslandSize;
-	public int minIslandSize;
-	public List<IslandData> islands = new List<IslandData>(); 
+	public List<Vector3Int> islandInfo = new List<Vector3Int>();
+	public List<IslandData> islands = new List<IslandData>();
+	private List<Vector2Int> usedTiles = new List<Vector2Int>();
 
 	private void Start()
 	{
@@ -24,73 +23,81 @@ public class WorldData : MonoBehaviour
 
 	void GenWorldData()
 	{
-		List<Vector2Int> usedTiles = new List<Vector2Int>();
-		for (int i = 0; i < islandCount; i++)
+		
+		foreach(Vector3Int v in islandInfo)
 		{
-			List<Vector2Int> tiles = new List<Vector2Int>();
-			List<Vector2Int> possTiles = new List<Vector2Int>();
-			
-			IslandData currentIsland = new IslandData();
-			islands.Add(currentIsland);
-			Vector2Int loc = Vector2Int.zero;
-			while (usedTiles.Contains(loc))
+			for (int i = 0; i < v.z; i++)
 			{
-				Vector3 spot = new Vector3(Random.Range(-worldSize, worldSize), 0, Random.Range(-worldSize, worldSize));
-				loc = HexGrid.RoundToGrid(spot);
+				AddIsland(Random.Range(v.x, v.y));
 			}
-			tiles.Add(loc);
-			
-			foreach (Vector2Int v in HexGrid.FindAdjacentGridLocs(loc))
-			{
-				if(!tiles.Contains(v) && !possTiles.Contains(v) && !usedTiles.Contains(v))
-					possTiles.Add(v);
-			}
-			int islandSize = Random.Range(minIslandSize, maxIslandSize);
-			while (tiles.Count < islandSize && possTiles.Count > 0)
-			{
-				Vector2Int tile = possTiles[Random.Range(0, possTiles.Count)];
-				foreach (Vector2Int v in HexGrid.FindAdjacentGridLocs(tile))
-				{
-					if (!tiles.Contains(v) && !possTiles.Contains(v) && !usedTiles.Contains(v))
-						possTiles.Add(v);
-				}
-				possTiles.Remove(tile);
-				tiles.Add(tile);
-			}
-			foreach (Vector2Int v in FindOutline(tiles))
-			{
-				if(!usedTiles.Contains(v))
-					tiles.Add(v);
-			}
-			List<Vector2Int> remove = new List<Vector2Int>();
-			remove.AddRange(tiles);
-			remove.AddRange(FindOutline(remove));
-			remove.AddRange(FindOutline(remove));
-
-			foreach (Vector2Int v in remove)
-				usedTiles.Add(v);
-			foreach (Vector2Int v in tiles)
-			{
-				currentIsland.tiles.Add(v, new WorldTile(v));
-			}
-			currentIsland.tileCount = currentIsland.tiles.Count;
 		}
+		
 		Debug.Log(usedTiles.Count);
 		GetComponent<WorldMesh>().GenMesh();
 	}
-	List<Vector2Int> FindOutline(List<Vector2Int> island)
+
+	void AddIsland(int islandSize)
 	{
-		List<Vector2Int> outline = new List<Vector2Int>();
-		foreach(Vector2Int v in island)
+
+		List<Vector2Int> tiles = new List<Vector2Int>();
+		List<Vector2Int> possTiles = new List<Vector2Int>();
+
+		IslandData currentIsland = new IslandData();
+		islands.Add(currentIsland);
+		Vector2Int loc = Vector2Int.zero;
+		int x = 0;
+		while (usedTiles.Contains(loc))
 		{
-			foreach(Vector2Int adj in HexGrid.FindAdjacentGridLocs(v))
+			if (x >= 10)
 			{
-				if (!island.Contains(adj) && !outline.Contains(adj))
-				{
-					outline.Add(adj);
-				}
+				worldSize++;
+				x = 0;
+				Debug.Log("X");
+			}
+			Vector3 spot = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(0, worldSize);
+			loc = HexGrid.RoundToGrid(spot);
+			x++;
+		}
+		tiles.Add(loc);
+
+		foreach (Vector2Int v in HexGrid.FindAdjacentGridLocs(loc))
+		{
+			if (!tiles.Contains(v) && !possTiles.Contains(v) && !usedTiles.Contains(v))
+				possTiles.Add(v);
+		}
+		while (tiles.Count < islandSize && possTiles.Count > 0)
+		{
+			Vector2Int tile = possTiles[Random.Range(0, possTiles.Count)];
+			foreach (Vector2Int v in HexGrid.FindAdjacentGridLocs(tile))
+			{
+				if (!tiles.Contains(v) && !possTiles.Contains(v) && !usedTiles.Contains(v))
+					possTiles.Add(v);
+			}
+			possTiles.Remove(tile);
+			tiles.Add(tile);
+		}
+		for (int j = 0; j < 2; j++)
+		{
+			foreach (Vector2Int v in HexGrid.FindOutline(tiles))
+			{
+				if (!usedTiles.Contains(v))
+					tiles.Add(v);
 			}
 		}
-		return outline;
+		List<Vector2Int> remove = new List<Vector2Int>();
+		remove.AddRange(tiles);
+		remove.AddRange(HexGrid.FindOutline(remove));
+		remove.AddRange(HexGrid.FindOutline(remove));
+		remove.AddRange(HexGrid.FindOutline(remove));
+
+		foreach (Vector2Int v in remove)
+			usedTiles.Add(v);
+		foreach (Vector2Int v in tiles)
+		{
+			currentIsland.tiles.Add(new WorldTile(v));
+			currentIsland.gridLocs.Add(v);
+		}
+		currentIsland.CalcHeights();
+
 	}
 }

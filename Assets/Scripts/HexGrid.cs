@@ -7,6 +7,7 @@ public static class HexGrid
 	public static float hexRadius = 0.5773502691896258f;
 	public static float tileHeight = 1f/4f;
 	public static float sqrt3 = Mathf.Sqrt(3);
+	public static int tiCount = 2;
 
 	//Finds distance in number of hexes between the hex at grid location fromLoc and the hex at toLoc
 	public static int FindFlatGridDistance(Vector2Int fromLoc, Vector2Int toLoc)
@@ -157,5 +158,21 @@ public static class HexGrid
 			verts.Add(vert);
 		}
 		return verts;
+	}
+
+	public static List<Vector2Int> FindOutline(List<Vector2Int> island)
+	{
+		List<Vector2Int> outline = new List<Vector2Int>();
+		foreach (Vector2Int v in island)
+		{
+			foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(v))
+			{
+				if (!island.Contains(adj) && !outline.Contains(adj))
+				{
+					outline.Add(adj);
+				}
+			}
+		}
+		return outline;
 	}
 }

@@ -16,25 +16,17 @@ public class WorldTile
 	public WorldTile(Vector2Int loc)
 	{
 		gridLoc = loc;
-		type = WorldTileType.Plains;
+		type = WorldTileType.Grass;
 		verts = HexGrid.GetVertLocs(loc);
 		tris = new List<int>();
-
-		//set height of each vert //  Needs to be replaced, perlin noise is weak, write something better
+		heights = new List<int> { 0, 0, 0, 0, 0, 0 };
+	}
+	public void CalcTopo()
+	{
 		for (int i = 0; i < verts.Count; i++)
 		{
-			Vector3 temp = verts[i];
-			//temp.y = Mathf.PerlinNoise((temp.x - 10000) / 10, (temp.z + 2500) / 10) * 16;
-			temp.y = 1;
-			temp.y = Mathf.RoundToInt(temp.y) * HexGrid.tileHeight;
-			verts[i] = temp;
+			verts[i] = new Vector3(verts[i].x, heights[i] * HexGrid.tileHeight, verts[i].z);
 		}
-		heights = new List<int>();
-		foreach (Vector3 point in verts)
-		{
-			heights.Add(Mathf.RoundToInt(point.y / HexGrid.tileHeight));
-		}
-
 		//find lowest height
 		int level = 1000;
 		foreach (int i in heights)
@@ -56,7 +48,7 @@ public class WorldTile
 			(float)System.Math.Round(Vector3.Distance(verts[1], verts[4]), 3),
 			(float)System.Math.Round(Vector3.Distance(verts[2], verts[5]), 3)
 		};
-
+	
 		//find highest height
 		float highest = 0;
 		foreach (float h in heights)
@@ -67,6 +59,7 @@ public class WorldTile
 
 		//calc topo
 		//flat
+	
 		if(highest == 0)
 		{
 			tris = new List<int> { 0, 1, 2, 0, 2, 3, 0, 3, 5, 3, 4, 5 };
@@ -137,16 +130,16 @@ public class WorldTile
 		}
 		uvs = new List<Vector2>
 		{
-			new Vector2(0.5f, 1),
-			new Vector2(0.9375f, 0.75f),
-			new Vector2(0.9375f, 0.25f),
-			new Vector2(0.5f, 0),
-			new Vector2(0.0625f, 0.25f),
-			new Vector2(0.0625f, 0.75f)
+			new Vector2((0.5f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 1),
+			new Vector2((0.9375f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.75f),
+			new Vector2((0.9375f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.25f),
+			new Vector2((0.5f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0),
+			new Vector2((0.0625f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.25f),
+			new Vector2((0.0625f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.75f)
 		};
 		if (tris.Count != 12)
 			tris = new List<int> { 0, 1, 2, 0, 2, 3, 0, 3, 5, 3, 4, 5 };
 	}
 }
 
-public enum WorldTileType { Plains, Forest, Water }
+public enum WorldTileType { Grass, Sand, Dirt, Count }
