@@ -44,8 +44,7 @@ public class IslandData
 						tiles[gridLocs.IndexOf(loc)].type = WorldTileType.Sand;
 				}
 			}
-			if(tempTiles.Count != gridLocs.Count)
-				h += 1f;
+			h += 1f;
 			foreach(Vector2Int v in toRemove)
 			{
 				tempTiles.Remove(v);
