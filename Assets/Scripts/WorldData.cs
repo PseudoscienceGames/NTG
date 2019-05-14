@@ -97,6 +97,14 @@ public class WorldData : MonoBehaviour
 			currentIsland.tiles.Add(new WorldTile(v));
 			currentIsland.gridLocs.Add(v);
 		}
+		foreach (Vector2Int v in tiles)
+		{
+			foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(v))
+			{
+				if (tiles.Contains(adj))
+					currentIsland.tiles[currentIsland.gridLocs.IndexOf(v)].connections.Add(adj);
+			}
+		}
 		currentIsland.CalcHeights();
 
 	}

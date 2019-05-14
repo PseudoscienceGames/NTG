@@ -7,16 +7,15 @@ public class WorldTile
 {
 	public Vector2Int gridLoc;
 	public List<int> heights;
-	public WorldTileType type;
 	public List<Vector3> verts;
 	public List<int> tris;
 	public List<Vector2> uvs;
 	public List<float> dis = new List<float>();
+	public List<Vector2Int> connections = new List<Vector2Int>();
 
 	public WorldTile(Vector2Int loc)
 	{
 		gridLoc = loc;
-		type = WorldTileType.Grass;
 		verts = HexGrid.GetVertLocs(loc);
 		tris = new List<int>();
 		heights = new List<int> { 0, 0, 0, 0, 0, 0 };
@@ -130,16 +129,14 @@ public class WorldTile
 		}
 		uvs = new List<Vector2>
 		{
-			new Vector2((0.5f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 1),
-			new Vector2((0.9375f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.75f),
-			new Vector2((0.9375f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.25f),
-			new Vector2((0.5f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0),
-			new Vector2((0.0625f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.25f),
-			new Vector2((0.0625f / (float)WorldTileType.Count) + (float)type / (float)WorldTileType.Count, 0.75f)
+			new Vector2(0.5f, 1),
+			new Vector2(0.9375f, 0.75f),
+			new Vector2(0.9375f, 0.25f),
+			new Vector2(0.5f, 0),
+			new Vector2(0.0625f, 0.25f),
+			new Vector2(0.0625f, 0.75f)
 		};
 		if (tris.Count != 12)
 			tris = new List<int> { 0, 1, 2, 0, 2, 3, 0, 3, 5, 3, 4, 5 };
 	}
 }
-
-public enum WorldTileType { Grass, Sand, Dirt, Count }

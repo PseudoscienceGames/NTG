@@ -7,9 +7,10 @@ public class WorldMesh : MonoBehaviour
 	public static WorldMesh Instance;
 	private void Awake(){ Instance = this; }
 
-	public List<Vector3> verts = new List<Vector3>();
-	public List<int> tris = new List<int>();
-	public List<Vector2> uvs = new List<Vector2>();
+	private List<Vector3> verts = new List<Vector3>();
+	private List<int> tris = new List<int>();
+	private List<Vector2> uvs = new List<Vector2>();
+	private List<Color> colors = new List<Color>();
 
 	public void GenMesh()
 	{
@@ -28,13 +29,61 @@ public class WorldMesh : MonoBehaviour
 			}
 		}
 		ExpandDoubles();
+		for (int i = 0; i < tris.Count; i += 3)
+		{
+			List<float> h = new List<float>
+			{
+				verts[tris[i]].y / HexGrid.tileHeight,
+				verts[tris[i + 1]].y / HexGrid.tileHeight,
+				verts[tris[i + 2]].y / HexGrid.tileHeight
+			};
+			if (Mathf.Approximately(h[0], h[1]) && Mathf.Approximately(h[0], h[2]))
+			{
+				if (h[0] < 2 || h[1] < 2 || h[2] < 2)
+				{
+					colors.Add(new Color(0, 0, 0, 0));
+					colors.Add(new Color(0, 0, 0, 0));
+					colors.Add(new Color(0, 0, 0, 0));
+				}
+				else
+				{
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+				}
+			}
+			else
+			{
+				if (h[0] < 2 && h[1] < 2 && h[2] < 2)
+				{
+					colors.Add(new Color(0, 0, 0, 0));
+					colors.Add(new Color(0, 0, 0, 0));
+					colors.Add(new Color(0, 0, 0, 0));
+				}
+				else if(Mathf.Abs(h[0] - h[1]) > 1 || Mathf.Abs(h[0] - h[2]) > 1 || Mathf.Abs(h[1] - h[2]) > 1)
+				{
+					colors.Add(new Color(1f / 100f, 0, 0, 0));
+					colors.Add(new Color(1f / 100f, 0, 0, 0));
+					colors.Add(new Color(1f / 100f, 0, 0, 0));
+				}
+				else
+				{
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+				}
+
+			}
+		}
+
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		mesh.vertices = verts.ToArray();
 		mesh.triangles = tris.ToArray();
 		mesh.uv = uvs.ToArray();
+		mesh.colors = colors.ToArray();
 		mesh.RecalculateNormals();
 		GetComponent<MeshCollider>().sharedMesh = mesh;
-		Debug.Log(verts.Count + " " + tris.Count + " " + Time.realtimeSinceStartup);
+		Debug.Log(verts.Count + " " + tris.Count + " " + colors.Count + " " + Time.realtimeSinceStartup);
 	}
 	void ExpandDoubles()
 	{
@@ -47,12 +96,8 @@ public class WorldMesh : MonoBehaviour
 			newTris.Add(newVerts.Count - 1);
 			newUVs.Add(uvs[tri]);
 		}
-		//while(newUVs.Count < newVerts.Count)
-		//{
-		//	newUVs.AddRange(new List<Vector2>{new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(1, 0)});
-		//}
-		uvs = newUVs;
 		verts = newVerts;
 		tris = newTris;
+		uvs = newUVs;
 	}
 }
