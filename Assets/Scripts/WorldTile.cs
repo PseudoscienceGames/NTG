@@ -62,6 +62,12 @@ public class WorldTile
 		if(highest == 0)
 		{
 			tris = new List<int> { 0, 1, 2, 0, 2, 3, 0, 3, 5, 3, 4, 5 };
+			if (verts[0].y > 0.25f && Random.Range(0, 2) == 0)
+			{
+				Vector3 loc = HexGrid.GridToWorld(gridLoc);
+				loc.y = verts[0].y;
+				WorldData.Instance.Mark(loc);
+			}
 		}
 		else if (Mathf.Approximately(dis[0], dis[1]) && Mathf.Approximately(dis[0], dis[2]))
 		{

@@ -39,29 +39,27 @@ public class IslandData
 	void FindEdge()
 	{
 		List<Vector2Int> blob = new List<Vector2Int>();
-		foreach (Vector2Int v in connections.Keys)
+		Dictionary<Vector2Int, int> vtc = new Dictionary<Vector2Int, int>();
+		foreach(WorldTile w in tiles)
 		{
-
-			if (connections[v].Count != 3)
+			foreach(Vector3 v in w.verts)
 			{
-				blob.Add(v);
+				Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10), Mathf.RoundToInt(v.z * 10));
+				if (!vtc.ContainsKey(k))
+					vtc.Add(k, 1);
+				else
+					vtc[k]++;
 			}
 		}
-		int c = blob.Count;
-		for (int i = 0; i < c; i++)
+		foreach(KeyValuePair<Vector2Int, int> kvp in vtc)
 		{
-			foreach (Vector2Int con in connections[blob[i]])
-			{
-				if (!blob.Contains(con))
-					blob.Add(con);
-			}
+			if (kvp.Value < 3)
+				blob.Add(kvp.Key);
 		}
 		blobs.Add(blob);
 	}
 	void FindBlobs()
 	{
-
-
 		List<Vector2Int> left = new List<Vector2Int>();
 		foreach (Vector2Int v in connections.Keys)
 		{
@@ -70,37 +68,40 @@ public class IslandData
 		}
 		if (left.Count > 0)
 		{
-			blobCount = connections.Count / 20;
+			blobCount = left.Count / 10;
 			if (blobCount == 0)
 				blobCount = 1;
 			for (int i = 0; i < blobCount; i++)
 			{
 				List<Vector2Int> blob = new List<Vector2Int>();
-				Vector2Int loc = left[Random.Range(0, left.Count)];
-				blob.Add(loc);
-				left.Remove(loc);
-				blobs.Add(blob);
-			}
-			int y = 0;
-			while (left.Count > 0 && y < 1000000)
-			{
-				y++;
-				if (y == 1000000)
-					Debug.Log("Y");
-				int x = Random.Range(1, blobs.Count);
-				//if (blobs.Count == 1)
-				//	Debug.Log(blobs.Count + " " + x);
-
-				List<Vector2Int> blob = blobs[x];
-				Vector2Int loc = blob[Random.Range(0, blob.Count)];
-				foreach (Vector2Int con in connections[loc])
+				List<Vector2Int> pot = new List<Vector2Int>();
+				while (pot.Count < 4)
 				{
-					if (left.Contains(con))
+					pot.Clear();
+					Vector2Int loc = left[Random.Range(0, left.Count)];
+					pot.Add(loc);
+					foreach (Vector2Int v in connections[loc])
 					{
-						blob.Add(con);
-						left.Remove(con);
+						if (left.Contains(v))
+							pot.Add(v);
 					}
 				}
+				foreach (Vector2Int v in pot)
+				{
+					blob.Add(v);
+					left.Remove(v);
+				}
+				blobs.Add(blob);
+			}
+			foreach(Vector2Int v in left)
+			{
+				int closest = 1;
+				for (int i = 2; i < blobs.Count; i++)
+				{
+					if (Vector2.Distance(blobs[i][0], v) < Vector2.Distance(blobs[closest][0], v))
+						closest = i;
+				}
+				blobs[closest].Add(v);
 			}
 		}
 	}
@@ -110,12 +111,15 @@ public class IslandData
 		FindEdge();
 		FindBlobs();
 		//Debug.Log(connections.Count + " " + blobs[0].Count + "  " + blobs[1].Count);
+		int h = 0;
 		for (int i = 0; i < blobs.Count; i++)
 		{
-			int h = Random.Range(1, 4);
-			foreach(Vector2Int v in blobs[i])
+			h++;
+			if (h == 5)
+				h = 1;
+			foreach (Vector2Int v in blobs[i])
 			{
-				if(i == 0)
+				if (i == 0)
 					heights.Add(v, 0);
 				else
 					heights.Add(v, h);
@@ -125,7 +129,10 @@ public class IslandData
 		{
 			for(int i = 0; i < w.heights.Count; i++)
 			{
-				w.heights[i] = heights[new Vector2Int(Mathf.RoundToInt(w.verts[i].x * 10), Mathf.RoundToInt(w.verts[i].z * 10))];
+				if (heights.ContainsKey(new Vector2Int(Mathf.RoundToInt(w.verts[i].x * 10), Mathf.RoundToInt(w.verts[i].z * 10))))
+					w.heights[i] = heights[new Vector2Int(Mathf.RoundToInt(w.verts[i].x * 10), Mathf.RoundToInt(w.verts[i].z * 10))];
+				else
+					Debug.Log("WRONG " + w.verts[i]);
 			}
 			w.CalcTopo();
 		}

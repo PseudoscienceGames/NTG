@@ -440,9 +440,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f61a5059fa4dee74caa3357785f80c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldSize: 50
+  worldSize: 1
   islandInfo:
-  - {x: 1, y: 80, z: 30}
+  - {x: 1, y: 300, z: 20}
   - {x: 5, y: 10, z: 0}
   - {x: 90, y: 110, z: 0}
   islands: []
@@ -959,7 +959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1357025477
 Transform:
   m_ObjectHideFlags: 0

@@ -38,12 +38,11 @@ public class WorldData : MonoBehaviour
 
 	void AddIsland(int islandSize)
 	{
-
+		if (islandSize < 2) islandSize = 2;
 		List<Vector2Int> tiles = new List<Vector2Int>();
 		List<Vector2Int> possTiles = new List<Vector2Int>();
 
 		IslandData currentIsland = new IslandData();
-		islands.Add(currentIsland);
 		Vector2Int loc = Vector2Int.zero;
 		int x = 0;
 		while (usedTiles.Contains(loc))
@@ -76,36 +75,42 @@ public class WorldData : MonoBehaviour
 			possTiles.Remove(tile);
 			tiles.Add(tile);
 		}
-		for (int j = 0; j < 2; j++)
-		{
-			foreach (Vector2Int v in HexGrid.FindOutline(tiles))
-			{
-				if (!usedTiles.Contains(v))
-					tiles.Add(v);
-			}
-		}
-		List<Vector2Int> remove = new List<Vector2Int>();
-		remove.AddRange(tiles);
-		remove.AddRange(HexGrid.FindOutline(remove));
-		remove.AddRange(HexGrid.FindOutline(remove));
-		remove.AddRange(HexGrid.FindOutline(remove));
+        if (tiles.Count == islandSize)
+        {
+            foreach (Vector2Int v in HexGrid.FindOutline(tiles))
+                tiles.Add(v);
+            List<Vector2Int> remove = new List<Vector2Int>();
+            remove.AddRange(tiles);
+            remove.AddRange(HexGrid.FindOutline(remove));
+            remove.AddRange(HexGrid.FindOutline(remove));
+            remove.AddRange(HexGrid.FindOutline(remove));
 
-		foreach (Vector2Int v in remove)
-			usedTiles.Add(v);
-		foreach (Vector2Int v in tiles)
-		{
-			currentIsland.tiles.Add(new WorldTile(v));
-			currentIsland.gridLocs.Add(v);
-		}
-		foreach (Vector2Int v in tiles)
-		{
-			foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(v))
-			{
-				if (tiles.Contains(adj))
-					currentIsland.tiles[currentIsland.gridLocs.IndexOf(v)].connections.Add(adj);
-			}
-		}
-		currentIsland.CalcHeights();
+            foreach (Vector2Int v in remove)
+                usedTiles.Add(v);
+            foreach (Vector2Int v in tiles)
+            {
+                currentIsland.tiles.Add(new WorldTile(v));
+                currentIsland.gridLocs.Add(v);
+            }
+            foreach (Vector2Int v in tiles)
+            {
+                foreach (Vector2Int adj in HexGrid.FindAdjacentGridLocs(v))
+                {
+                    if (tiles.Contains(adj))
+                        currentIsland.tiles[currentIsland.gridLocs.IndexOf(v)].connections.Add(adj);
+                }
+            }
+            currentIsland.CalcHeights();
+            islands.Add(currentIsland);
+        }
+        else
+            AddIsland(islandSize);
+	}
 
+	public void Mark(Vector3 loc)
+	{
+		GameObject tree = Instantiate(Resources.Load("Marker"), loc, transform.rotation) as GameObject;
+		tree.transform.localScale = Vector3.one * Random.Range(0.4f, 0.9f) + Vector3.up * Random.Range(-0.2f, 0.5f);
+		tree.transform.Rotate(Vector3.up * Random.Range(0f, 360f));
 	}
 }

@@ -60,7 +60,7 @@ public class WorldMesh : MonoBehaviour
 					colors.Add(new Color(0, 0, 0, 0));
 					colors.Add(new Color(0, 0, 0, 0));
 				}
-				else if(Mathf.Abs(h[0] - h[1]) > 1 || Mathf.Abs(h[0] - h[2]) > 1 || Mathf.Abs(h[1] - h[2]) > 1)
+				else if (Mathf.Abs(h[0] - h[1]) > 1 || Mathf.Abs(h[0] - h[2]) > 1 || Mathf.Abs(h[1] - h[2]) > 1)
 				{
 					colors.Add(new Color(1f / 100f, 0, 0, 0));
 					colors.Add(new Color(1f / 100f, 0, 0, 0));
