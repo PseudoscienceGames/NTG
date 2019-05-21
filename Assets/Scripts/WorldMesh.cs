@@ -54,13 +54,21 @@ public class WorldMesh : MonoBehaviour
 			}
 			else
 			{
+				float l1 = Mathf.Round(Vector3.Distance(verts[tris[i]], verts[tris[i + 1]]) * 1000f) / 1000f;
+				float l2 = Mathf.Round(Vector3.Distance(verts[tris[i + 1]], verts[tris[i + 2]]) * 1000f) / 1000f;
+				float l3 = Mathf.Round(Vector3.Distance(verts[tris[i + 2]], verts[tris[i]]) * 1000f) / 1000f;
 				if (h[0] < 2 && h[1] < 2 && h[2] < 2)
 				{
 					colors.Add(new Color(0, 0, 0, 0));
 					colors.Add(new Color(0, 0, 0, 0));
 					colors.Add(new Color(0, 0, 0, 0));
 				}
-				else if (Mathf.Abs(h[0] - h[1]) > 1 || Mathf.Abs(h[0] - h[2]) > 1 || Mathf.Abs(h[1] - h[2]) > 1)
+				else if (Mathf.Abs(h[0] - h[1]) > 1 || Mathf.Abs(h[0] - h[2]) > 1 || Mathf.Abs(h[1] - h[2]) > 1 ||
+					(Mathf.Approximately(l1, 0.629f) && Mathf.Approximately(l2, 0.629f)) ||
+					(Mathf.Approximately(l2, 0.629f) && Mathf.Approximately(l3, 0.629f)) ||
+					(Mathf.Approximately(l3, 0.629f) && Mathf.Approximately(l1, 0.629f)))
+
+
 				{
 					colors.Add(new Color(1f / 100f, 0, 0, 0));
 					colors.Add(new Color(1f / 100f, 0, 0, 0));
@@ -72,7 +80,6 @@ public class WorldMesh : MonoBehaviour
 					colors.Add(new Color(2f / 100f, 0, 0, 0));
 					colors.Add(new Color(2f / 100f, 0, 0, 0));
 				}
-
 			}
 		}
 

@@ -110,7 +110,7 @@ public class WorldData : MonoBehaviour
 	public void Mark(Vector3 loc)
 	{
 		GameObject tree = Instantiate(Resources.Load("Marker"), loc, transform.rotation) as GameObject;
-		tree.transform.localScale = Vector3.one * Random.Range(0.4f, 0.9f) + Vector3.up * Random.Range(-0.2f, 0.5f);
-		tree.transform.Rotate(Vector3.up * Random.Range(0f, 360f));
+		//tree.transform.localScale = Vector3.one * Random.Range(0.4f, 0.9f) + Vector3.up * Random.Range(-0.2f, 0.5f);
+		tree.transform.Rotate(Vector3.up * (Random.Range(0, 6) * 60));
 	}
 }
