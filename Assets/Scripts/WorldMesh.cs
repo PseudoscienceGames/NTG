@@ -57,16 +57,29 @@ public class WorldMesh : MonoBehaviour
 				float l1 = Mathf.Round(Vector3.Distance(verts[tris[i]], verts[tris[i + 1]]) * 1000f) / 1000f;
 				float l2 = Mathf.Round(Vector3.Distance(verts[tris[i + 1]], verts[tris[i + 2]]) * 1000f) / 1000f;
 				float l3 = Mathf.Round(Vector3.Distance(verts[tris[i + 2]], verts[tris[i]]) * 1000f) / 1000f;
+				//Debug.Log(l1);
+				//Debug.Log(l2);
+				//Debug.Log(l3);
 				if (h[0] < 2 && h[1] < 2 && h[2] < 2)
 				{
 					colors.Add(new Color(0, 0, 0, 0));
 					colors.Add(new Color(0, 0, 0, 0));
 					colors.Add(new Color(0, 0, 0, 0));
 				}
-				else if (Mathf.Abs(h[0] - h[1]) > 1 || Mathf.Abs(h[0] - h[2]) > 1 || Mathf.Abs(h[1] - h[2]) > 1 ||
+				else if (
+					((Mathf.Approximately(l1, 1.118f) && (Mathf.Approximately(l2, 1.258f) || Mathf.Approximately(l3, 1.258f))) ||
+					(l2 == 1.118f && (l1 == 1.258f || l3 == 1.258f)) ||
+					(l3 == 1.118f && (l2 == 1.258f || l1 == 1.258f))))
+				{
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+					colors.Add(new Color(2f / 100f, 0, 0, 0));
+				}
+				else if(
+					(Mathf.Abs(h[0] - h[1]) > 1 || Mathf.Abs(h[0] - h[2]) > 1 || Mathf.Abs(h[1] - h[2]) > 1 ||
 					(Mathf.Approximately(l1, 0.629f) && Mathf.Approximately(l2, 0.629f)) ||
 					(Mathf.Approximately(l2, 0.629f) && Mathf.Approximately(l3, 0.629f)) ||
-					(Mathf.Approximately(l3, 0.629f) && Mathf.Approximately(l1, 0.629f)))
+					(Mathf.Approximately(l3, 0.629f) && Mathf.Approximately(l1, 0.629f))))
 
 
 				{

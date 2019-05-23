@@ -14,27 +14,60 @@ public class IslandData
 
 	void BuildConnections()
 	{
-		foreach(WorldTile w in tiles)
+		foreach (WorldTile w in tiles)
 		{
-			foreach(Vector3 v in w.verts)
+			foreach (Vector3 v in w.verts)
 			{
-				Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10), Mathf.RoundToInt(v.z * 10));
+				Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10f), Mathf.RoundToInt(v.z * 10f));
 				if (!connections.ContainsKey(k))
 				{
 					connections.Add(k, new List<Vector2Int>());
 				}
 			}
 		}
-		foreach(Vector2Int c1 in connections.Keys)
+		foreach (WorldTile w in tiles)
 		{
-			foreach (Vector2Int c2 in connections.Keys)
+			foreach(Vector3 v in w.verts)
 			{
-				if(!connections[c1].Contains(c2) && Vector2Int.Distance(c1, c2) < 6.5f && c1 != c2)
+				Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10f), Mathf.RoundToInt(v.z * 10f));
+				for (int i = 0; i < 6; i++)
 				{
-					connections[c1].Add(c2);
+					Vector3 dir = Quaternion.Euler(0, i * 60f, 0) * (Vector3.forward * 0.57735f);
+					Vector2Int k2 = new Vector2Int(Mathf.RoundToInt((v.x + dir.x) * 10f), Mathf.RoundToInt((v.z + dir.z) * 10f));
+					if(connections.ContainsKey(k2) && !connections[k].Contains(k2))
+						connections[k].Add(k2);
 				}
 			}
 		}
+		//foreach (WorldTile w in tiles)
+		//{
+		//	foreach(Vector3 v in w.verts)
+		//	{
+		//		Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10f), Mathf.RoundToInt(v.z * 10f));
+		//		if (!connections.ContainsKey(k))
+		//		{
+		//			connections.Add(k, new List<Vector2Int>());
+		//			for (int i = 0; i < 6; i++)
+		//			{
+		//				Vector3 dir = Quaternion.Euler(0, i * 60f, 0) * (Vector3.forward * 0.57735f);
+		//				Vector2Int k2 = new Vector2Int(Mathf.RoundToInt((v.x + dir.x) * 10f), Mathf.RoundToInt((v.z + dir.z) * 10f));
+		//				connections[k].Add(k2);
+		//			}
+		//		}
+		//	}
+		//}
+		//Dictionary<Vector2Int, List<Vector2Int>> tempCon = new Dictionary<Vector2Int, List<Vector2Int>>(connections);
+		//foreach(Vector2Int c1 in connections.Keys)
+		//{
+		//	tempCon[c1] = new List<Vector2Int>();
+		//	for (int i = 0; i < 6; i++)
+		//	{
+		//		if (connections.ContainsKey(connections[c1][i]))
+		//			tempCon[c1].Add(connections[c1][i]);
+		//	}
+		//}
+		//connections = tempCon;
+
 	}
 	void FindEdge()
 	{
@@ -44,7 +77,7 @@ public class IslandData
 		{
 			foreach(Vector3 v in w.verts)
 			{
-				Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10), Mathf.RoundToInt(v.z * 10));
+				Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10f), Mathf.RoundToInt(v.z * 10f));
 				if (!vtc.ContainsKey(k))
 					vtc.Add(k, 1);
 				else
@@ -117,6 +150,8 @@ public class IslandData
 			h++;
 			if (h == 5)
 				h = 1;
+			if (Random.Range(0, 30) == 0)
+				h = 0;
 			foreach (Vector2Int v in blobs[i])
 			{
 				if (i == 0)
@@ -127,10 +162,10 @@ public class IslandData
 		}
 		foreach (WorldTile w in tiles)
 		{
-			for(int i = 0; i < w.heights.Count; i++)
+			for (int i = 0; i < w.heights.Count; i++)
 			{
-				if (heights.ContainsKey(new Vector2Int(Mathf.RoundToInt(w.verts[i].x * 10), Mathf.RoundToInt(w.verts[i].z * 10))))
-					w.heights[i] = heights[new Vector2Int(Mathf.RoundToInt(w.verts[i].x * 10), Mathf.RoundToInt(w.verts[i].z * 10))];
+				if (heights.ContainsKey(new Vector2Int(Mathf.RoundToInt(w.verts[i].x * 10f), Mathf.RoundToInt(w.verts[i].z * 10f))))
+					w.heights[i] = heights[new Vector2Int(Mathf.RoundToInt(w.verts[i].x * 10f), Mathf.RoundToInt(w.verts[i].z * 10f))];
 				else
 					Debug.Log("WRONG " + w.verts[i]);
 			}
