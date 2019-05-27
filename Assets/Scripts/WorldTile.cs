@@ -12,6 +12,7 @@ public class WorldTile
 	public List<Vector2> uvs;
 	public List<float> dis = new List<float>();
 	public List<Vector2Int> connections = new List<Vector2Int>();
+	public bool flat = false;
 
 	public WorldTile(Vector2Int loc)
 	{
@@ -61,6 +62,7 @@ public class WorldTile
 	
 		if(highest == 0)
 		{
+			flat = true;
 			tris = new List<int> { 0, 1, 2, 0, 2, 3, 0, 3, 5, 3, 4, 5 };
 			if (verts[0].y > 0.25f && Random.Range(0, 2) == 0)
 			{

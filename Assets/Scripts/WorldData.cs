@@ -53,7 +53,7 @@ public class WorldData : MonoBehaviour
 				x = 0;
 				Debug.Log("X");
 			}
-			Vector3 spot = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(0, worldSize);
+			Vector3 spot = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * worldSize;
 			loc = HexGrid.RoundToGrid(spot);
 			x++;
 		}

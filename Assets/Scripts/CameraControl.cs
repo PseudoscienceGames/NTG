@@ -92,6 +92,14 @@ public class CameraControl : MonoBehaviour
 			oldPos = transform.position;
 			velocity = Vector3.zero;
 		}
+		if (transform.position.x > 100)
+			transform.position = new Vector3(100, transform.position.y, transform.position.z);
+		if (transform.position.z > 100)
+			transform.position = new Vector3(transform.position.x, transform.position.y, 100);
+		if (transform.position.x < -100)
+			transform.position = new Vector3(-100, transform.position.y, transform.position.z);
+		if (transform.position.z < -100)
+			transform.position = new Vector3(transform.position.x, transform.position.y, -100);
 	}
 
 	private void LateUpdate()

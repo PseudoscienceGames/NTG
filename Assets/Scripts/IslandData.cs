@@ -39,35 +39,6 @@ public class IslandData
 				}
 			}
 		}
-		//foreach (WorldTile w in tiles)
-		//{
-		//	foreach(Vector3 v in w.verts)
-		//	{
-		//		Vector2Int k = new Vector2Int(Mathf.RoundToInt(v.x * 10f), Mathf.RoundToInt(v.z * 10f));
-		//		if (!connections.ContainsKey(k))
-		//		{
-		//			connections.Add(k, new List<Vector2Int>());
-		//			for (int i = 0; i < 6; i++)
-		//			{
-		//				Vector3 dir = Quaternion.Euler(0, i * 60f, 0) * (Vector3.forward * 0.57735f);
-		//				Vector2Int k2 = new Vector2Int(Mathf.RoundToInt((v.x + dir.x) * 10f), Mathf.RoundToInt((v.z + dir.z) * 10f));
-		//				connections[k].Add(k2);
-		//			}
-		//		}
-		//	}
-		//}
-		//Dictionary<Vector2Int, List<Vector2Int>> tempCon = new Dictionary<Vector2Int, List<Vector2Int>>(connections);
-		//foreach(Vector2Int c1 in connections.Keys)
-		//{
-		//	tempCon[c1] = new List<Vector2Int>();
-		//	for (int i = 0; i < 6; i++)
-		//	{
-		//		if (connections.ContainsKey(connections[c1][i]))
-		//			tempCon[c1].Add(connections[c1][i]);
-		//	}
-		//}
-		//connections = tempCon;
-
 	}
 	void FindEdge()
 	{
@@ -147,7 +118,7 @@ public class IslandData
 		int h = 0;
 		for (int i = 0; i < blobs.Count; i++)
 		{
-			h++;
+			
 			if (h == 5)
 				h = 1;
 			if (Random.Range(0, 30) == 0)
@@ -159,6 +130,7 @@ public class IslandData
 				else
 					heights.Add(v, h);
 			}
+			h++;
 		}
 		foreach (WorldTile w in tiles)
 		{

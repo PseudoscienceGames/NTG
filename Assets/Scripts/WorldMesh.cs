@@ -7,6 +7,7 @@ public class WorldMesh : MonoBehaviour
 	public static WorldMesh Instance;
 	private void Awake(){ Instance = this; }
 
+	public float noiseScale;
 	private List<Vector3> verts = new List<Vector3>();
 	private List<int> tris = new List<int>();
 	private List<Vector2> uvs = new List<Vector2>();
@@ -39,7 +40,7 @@ public class WorldMesh : MonoBehaviour
 			};
 			if (Mathf.Approximately(h[0], h[1]) && Mathf.Approximately(h[0], h[2]))
 			{
-				if (h[0] < 2 || h[1] < 2 || h[2] < 2)
+				if (h[0] < 1.5f || h[1] < 1.5f || h[2] < 1.5f)
 				{
 					colors.Add(new Color(0, 0, 0, 0));
 					colors.Add(new Color(0, 0, 0, 0));
@@ -60,7 +61,7 @@ public class WorldMesh : MonoBehaviour
 				//Debug.Log(l1);
 				//Debug.Log(l2);
 				//Debug.Log(l3);
-				if (h[0] < 2 && h[1] < 2 && h[2] < 2)
+				if (h[0] < 1.5f && h[1] < 1.5f && h[2] < 1.5f)
 				{
 					colors.Add(new Color(0, 0, 0, 0));
 					colors.Add(new Color(0, 0, 0, 0));
